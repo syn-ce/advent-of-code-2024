@@ -1,3 +1,6 @@
+from functools import cmp_to_key
+
+
 def correct_order(nums: list[int], forbidden_successors: dict[int, set[int]]) -> bool:
     for i in range(len(nums)):
         for j in range(i + 1, len(nums)):
@@ -21,11 +24,17 @@ with open("input.txt", 'r') as file:
     i += 1
 
     middle_sum = 0
+    middle_sum_unordered = 0
     # Check prints (naively, O(n^2))
     while i < len(lines):
         nums = [int(n) for n in lines[i].split(',')]
         if correct_order(nums, forbidden_successors):
             middle_sum += nums[len(nums) // 2]
+        else:
+            nums2 = sorted(nums, key=cmp_to_key(
+                lambda a, b: -1 if a in forbidden_successors and b in forbidden_successors[a] else 1))
+            middle_sum_unordered += nums2[len(nums2) // 2]
         i += 1
 
     print(middle_sum)
+    print(middle_sum_unordered)
