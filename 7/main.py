@@ -1,18 +1,21 @@
+import math
 from typing import Callable
 import operator
 
 
 def backtrack_operations(target: int, cur: int, nums: list[int], idx: int,
-                         operation: Callable[[int, int], int]) -> bool:
+                         operators: list[Callable[[int, int], int]], op_idx: int) -> bool:
     if idx == len(nums):
         return cur == target
 
-    # Apply operation
-    cur = operation(cur, nums[idx])
+    # Apply operator
+    cur = operators[op_idx](cur, nums[idx])
 
-    # Try both operations for next position
-    return (backtrack_operations(target, cur, nums, idx + 1, operator.add)
-            or backtrack_operations(target, cur, nums, idx + 1, operator.mul))
+    if cur > target:  # Assumes all nums to be strictly positive
+        return False
+
+    # (Lazily) try (all) operators for next position
+    return any(backtrack_operations(target, cur, nums, idx + 1, operators, op_ix) for op_ix in range(len(operators)))
 
 
 with open("input.txt", 'r') as file:
@@ -22,9 +25,10 @@ with open("input.txt", 'r') as file:
         target = int(target[:-1])  # Remove colon
         nums = list(map(int, nums))
 
+        # Assumes all nums to be strictly positive
+        operators = [operator.add, operator.mul, lambda a, b: pow(10, int(math.ceil(math.log10(b + 1)))) * a + b]
         # Try all combinations
-        if (backtrack_operations(target, nums[0], nums, 1, operator.add)
-                or backtrack_operations(target, nums[0], nums, 1, operator.mul)):
+        if any(backtrack_operations(target, nums[0], nums, 1, operators, op_ix) for op_ix in range(len(operators))):
             total += target
 
     print(total)
