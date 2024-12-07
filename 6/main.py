@@ -59,18 +59,22 @@ def load_board(file_name: str) -> (list[list[chr]], int, int):
 
 
 board, start_row, start_col = load_board('input.txt')
+
 # Simulate starting from (start_row, start_col)
 visited: dict[(int, int), set[(int, int)]] = dict()
+circle_in_simulation(board, start_row, start_col, 0, -1, visited)
 
 circle_count = 0
-for row in range(len(board)):
-    print(f'{round(row / len(board), 3) * 100}%')
-    for col in range(len(board[0])):
-        if board[row][col] == '.':
-            board[row][col] = '#'
-            visited.clear()
-            if circle_in_simulation(board, start_row, start_col, 0, -1, visited):
-                circle_count += 1
-            board[row][col] = '.'
+del visited[(start_row, start_col)]  # Can't place obstacle at initial guard position
+# Only obstacles in _visited_ places make a difference
+for i, pos in enumerate(visited):
+    row, col = pos
+    if i % (len(visited) // 100) == 0:
+        print(f'{round(i * 100 / len(visited), 2)}%')
+    if board[row][col] == '.':
+        board[row][col] = '#'
+        if circle_in_simulation(board, start_row, start_col, 0, -1, dict()):
+            circle_count += 1
+        board[row][col] = '.'
 
 print(circle_count)
