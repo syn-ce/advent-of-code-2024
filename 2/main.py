@@ -4,13 +4,40 @@ def valid_step(n1: int, n2: int, increasing: bool) -> bool:
     return n1 < n2 and n2 - n1 <= 3
 
 
-safe_records = 0
+def read_records(file_name: str) -> list[list[int]]:
+    records = []
+    with open(file_name, 'r') as file:
+        for line in file:
+            record = line.split()
+            records.append(list(map(int, record)))
+    return records
 
-with open('input.txt', 'r') as file:
-    for line in file:
-        record = line.split()
-        record = [int(n) for n in record]
 
+def part1():
+    safe_records = 0
+    records = read_records('input.txt')
+    for record in records:
+        increasing = record[0] < record[1]  # Assumes at least two numbers in record
+
+        safe = True
+
+        for i in range(len(record) - 1):
+            n1, n2 = record[i], record[i + 1]
+            if not increasing:
+                n1, n2 = n2, n1
+            if n1 >= n2 or n2 - n1 > 3:
+                safe = False
+                break
+
+        if safe:
+            safe_records += 1
+    return safe_records
+
+
+def part2():
+    safe_records = 0
+    records = read_records('input.txt')
+    for record in records:
         # Determine whether increasing or decreasing (for 2 of 24 configs,
         # we can't restore a sequence by eliminating just one number, but in
         # that case we don't care since we'll fail anyway) ((3,1,4,2) and (3,4,1,2))
@@ -39,5 +66,8 @@ with open('input.txt', 'r') as file:
 
         if safe:
             safe_records += 1
+    return safe_records
 
-print(safe_records)
+
+print(part1())
+print(part2())
