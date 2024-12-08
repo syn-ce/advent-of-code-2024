@@ -1,11 +1,31 @@
 import re
 
-sum_of_muls = 0
 
-with open('input.txt', 'r') as file:
-    s = file.read()
-    dos_donts_muls = re.findall(re.compile("(mul\(\d+,\d+\))|(do\(\))|(don't\(\))"), s)
-    print(dos_donts_muls)
+def read_instructions(file_name: str) -> str:
+    with open(file_name, 'r') as file:
+        return file.read()
+
+
+def part1():
+    sum_of_muls = 0
+
+    instructions = read_instructions('input.txt')
+    muls = re.findall("mul\(\d+,\d+\)", instructions)
+
+    for mul in muls:
+        mul_split = mul.split(',')
+        n1 = int(mul_split[0][4:])
+        n2 = int(mul_split[1][:-1])
+        sum_of_muls += n1 * n2
+
+    return sum_of_muls
+
+
+def part2():
+    sum_of_muls = 0
+
+    instructions = read_instructions('input.txt')
+    dos_donts_muls = re.findall(re.compile("(mul\(\d+,\d+\))|(do\(\))|(don't\(\))"), instructions)
     do = True
 
     for instruction in dos_donts_muls:
@@ -20,5 +40,8 @@ with open('input.txt', 'r') as file:
             do = False
         else:  # do()
             do = True
+    return sum_of_muls
 
-print(sum_of_muls)
+
+print(part1())
+print(part2())
