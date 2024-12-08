@@ -1,8 +1,9 @@
 def load_board(file_name: str) -> tuple[list[list[str]], int, int]:
+    start_row = -1  # Careful, -1 is a valid index in python
+    start_col = -1
+    board: list[list[str]] = []
+
     with open(file_name, 'r') as file:
-        start_row = -1  # Careful, -1 is a valid index in python
-        start_col = -1
-        board: list[list[str]] = []
         # Construct board and find starting position
         for i, line in enumerate(file):
             board.append(list(line.strip()))
@@ -14,7 +15,7 @@ def load_board(file_name: str) -> tuple[list[list[str]], int, int]:
                 except ValueError:
                     pass
 
-        return board, start_row, start_col
+    return board, start_row, start_col
 
 
 def board_bounds(board: list[list[str]], row: int, col: int) -> bool:
@@ -62,7 +63,7 @@ def part1():
     board, start_row, start_col = load_board('input.txt')
 
     # Simulate starting from (start_row, start_col)
-    visited: dict[(int, int), set[(int, int)]] = dict()
+    visited: dict[tuple[int, int], set[tuple[int, int]]] = dict()
     simulate_detect_cycle(board, start_row, start_col, 0, -1, visited)
 
     return len(visited)

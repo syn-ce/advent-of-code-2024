@@ -1,16 +1,11 @@
 from fractions import Fraction
 
 
-# One type of antenna:
-# Fore every pair:
-# Calculate distance as a vector between them, calculate positions of both antinodes
-# Check whether antinodes are on map
+def collect_antennas(file_name: str) -> tuple[dict[str, list[tuple[int, int]]], int, int]:
+    antennas: dict[str, list[tuple[int, int]]] = dict()
+    rows, cols = 0, 0
 
-def collect_antennas(file_name):
     with open(file_name, 'r') as file:
-        antennas: dict[chr, list[(int, int)]] = dict()
-        rows = 0
-        cols = 0
         for row, line in enumerate(file):
             for col, ch in enumerate(line.strip()):
                 if ch != '.':
@@ -19,10 +14,11 @@ def collect_antennas(file_name):
                     antennas[ch].append((row, col))
             cols = len(line)
             rows += 1
-        return antennas, rows, cols
+
+    return antennas, rows, cols
 
 
-def in_range(row_col: (int, int), rows: int, cols: int) -> bool:
+def in_range(row_col: tuple[int, int], rows: int, cols: int) -> bool:
     return 0 <= row_col[0] < rows and 0 <= row_col[1] < cols
 
 
@@ -30,7 +26,7 @@ def part1():
     antennas, rows, cols = collect_antennas('input.txt')
 
     # Pairs of same-type antennas create antidotes (might be out of bounds)
-    antinodes: set[(int, int)] = set()
+    antinodes: set[tuple[int, int]] = set()
     for ant_type_positions in antennas.values():
         for i, ant_position1 in enumerate(ant_type_positions):
             for j in range(i + 1, len(ant_type_positions)):
@@ -47,7 +43,7 @@ def part1():
 def part2():
     antennas, rows, cols = collect_antennas('input.txt')
 
-    antinodes: set[(int, int)] = set()
+    antinodes: set[tuple[int, int]] = set()
     for ant_type_positions in antennas.values():
         for i, ant_position1 in enumerate(ant_type_positions):
             for j in range(i + 1, len(ant_type_positions)):

@@ -1,9 +1,9 @@
 def read_board(file_name: str) -> list[list[str]]:
+    board = []
     with open(file_name, 'r') as file:
-        board = []
         for line in file:
             board.append(list(line.strip()))
-        return board
+    return board
 
 
 def count_appearances(board: list[list[str]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int):
@@ -42,7 +42,7 @@ def part1():
 # in one of two sets, depending on the direction of the 'MAS' (top left to bottom right, or bottom left to top right).
 # Then we can simply take the length of their intersection
 def count_crosses(board: list[list[str]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int,
-                  xmas_positions: set[(int, int)]) -> int:
+                  xmas_positions: set[tuple[int, int]]) -> int:
     if row < 0 or row >= len(board) or col < 0 or col >= len(board[row]) or board[row][col] != word[idx]:
         return 0
 

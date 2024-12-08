@@ -6,7 +6,6 @@ def read_sort_lists(file_name: str) -> tuple[list[int], list[int]]:
             n1, n2 = line.split()
             l1.append(int(n1))
             l2.append(int(n2))
-
     l1.sort()
     l2.sort()
     return l1, l2
