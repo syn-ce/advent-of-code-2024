@@ -1,12 +1,12 @@
-def read_board(file_name: str) -> list[list[chr]]:
-    with open('input.txt', 'r') as file:
+def read_board(file_name: str) -> list[list[str]]:
+    with open(file_name, 'r') as file:
         board = []
         for line in file:
             board.append(list(line.strip()))
         return board
 
 
-def count_appearances(board: list[list[chr]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int):
+def count_appearances(board: list[list[str]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int):
     if row < 0 or row >= len(board) or col < 0 or col >= len(board[row]) or board[row][col] != word[idx]:
         return 0
 
@@ -41,7 +41,7 @@ def part1():
 # Idea is to store the positions of 'middle cells' of the X formed by 'MAS' (i.e., the positions of the 'A')
 # in one of two sets, depending on the direction of the 'MAS' (top left to bottom right, or bottom left to top right).
 # Then we can simply take the length of their intersection
-def count_crosses(board: list[list[chr]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int,
+def count_crosses(board: list[list[str]], row: int, col: int, word: str, idx: int, xdir: int, ydir: int,
                   xmas_positions: set[(int, int)]) -> int:
     if row < 0 or row >= len(board) or col < 0 or col >= len(board[row]) or board[row][col] != word[idx]:
         return 0
