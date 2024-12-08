@@ -12,4 +12,5 @@
 | 8 $^{*2}$ | collect antennas by type, check both antinodes for every same-type pair                     | $n^2$          | $n$             | collect antennas by type, check all antinodes along line of two same-type pairs | $n^{2.5}$      | $n$             |
 
 $^{*1}$ actually $O(n)$ in Python because of sorting.
-$^{*2}$ $n$ is the size (nr of cells) of the board
+
+$^{*2}$ $n$ is the size (nr of cells) of the board.
