@@ -19,18 +19,27 @@ def apply_blink(stone: int) -> tuple[int, int]:
     return stone * 2024, -1
 
 
-def part1():
-    stones = read_stones('input.txt')
-    for _ in range(25):
-        nr_stones = len(stones)
-        for j in range(nr_stones):
-            stone = stones[j]
+def simulate_stone_blinking(nr_iterations: int) -> int:
+    stone_counts: dict[int, int] = dict((stone, 1) for stone in read_stones('input.txt'))
+    for _ in range(nr_iterations):
+        new_stone_counts: dict[int, int] = dict()
+        for stone, count in stone_counts.items():
             stone1, stone2 = apply_blink(stone)
-            stones[j] = stone1
+            new_stone_counts[stone1] = new_stone_counts.get(stone1, 0) + count
             if stone2 != -1:
-                stones.append(stone2)
+                new_stone_counts[stone2] = new_stone_counts.get(stone2, 0) + count
+        stone_counts = new_stone_counts
 
-    return len(stones)
+    return sum(stone_counts.values())
+
+
+def part1():
+    return simulate_stone_blinking(25)
+
+
+def part2():
+    return simulate_stone_blinking(75)
 
 
 print(part1())
+print(part2())
