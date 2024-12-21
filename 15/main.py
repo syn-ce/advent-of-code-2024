@@ -45,11 +45,9 @@ def try_move_in_direction(warehouse: list[list[str]], row: int, col: int, direct
     int, int]:
     new_row, new_col = row + direction[0], col + direction[1]
     if warehouse[new_row][new_col] == '.':  # Can move
-        print(f'Move to {new_row}, {new_col}')
         return new_row, new_col
     # Obstacle
     if warehouse[new_row][new_col] == '#':  # Wall -> can't move
-        print(f'Can\'t move, stay at {row}, {col}')
         return row, col
     # Box -> try to push
     # Try to find empty space
@@ -60,27 +58,29 @@ def try_move_in_direction(warehouse: list[list[str]], row: int, col: int, direct
         cur_col += direction[1]
 
     if warehouse[cur_row][cur_col] == '#':  # Can't push boxes
-        print(f'Can\'t push, stay at {row}, {col}')
         return row, col
 
     # Found empty space -> Move boxes (Moving the first box into last position "moves every box"
     # if we ignore the identities of the boxes
     warehouse[cur_row][cur_col] = 'O'
     warehouse[new_row][new_col] = '.'
-    print(f'Push, move to {new_row}, {new_col}')
     return new_row, new_col
 
 
-warehouse, moves, robot_pos = load_warehouse('input.txt')
+def part1():
+    warehouse, moves, robot_pos = load_warehouse('input.txt')
 
-for move in moves:
-    robot_pos = try_move_in_direction(warehouse, robot_pos[0], robot_pos[1], move)
+    for move in moves:
+        robot_pos = try_move_in_direction(warehouse, robot_pos[0], robot_pos[1], move)
 
-gps_sum = 0
-for row in range(len(warehouse)):
-    for col in range(len(warehouse[row])):
-        if warehouse[row][col] != 'O':
-            continue
-        gps_sum += 100 * row + col
+    gps_sum = 0
+    for row in range(len(warehouse)):
+        for col in range(len(warehouse[row])):
+            if warehouse[row][col] != 'O':
+                continue
+            gps_sum += 100 * row + col
 
-print(gps_sum)
+    return gps_sum
+
+
+print(part1())
