@@ -6,7 +6,7 @@ def load_obstacles(filename: str) -> list[tuple[int, int]]:
     with open(filename) as file:
         for i, line in enumerate(file):
             nums = line.strip().split(',')
-            obstacles.append((int(nums[1]), int(nums[0])))
+            obstacles.append((int(nums[1]), int(nums[0])))  # X, Y
     return obstacles
 
 
@@ -59,7 +59,7 @@ def part2(memory_dimensions: tuple[int, int]) -> tuple[int, int]:
     for byte_idx in range(len(all_obstacles) - 1, -1, -1):
         cur_obstacles.remove(all_obstacles[byte_idx])
         if bfs(memory_dimensions[0], memory_dimensions[1], cur_obstacles) != -1:
-            return all_obstacles[byte_idx][1], all_obstacles[byte_idx][0]
+            return all_obstacles[byte_idx][1], all_obstacles[byte_idx][0]  # X, Y
     return -1, -1
 
 
