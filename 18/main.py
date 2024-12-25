@@ -1,14 +1,12 @@
 from collections import deque
 
 
-def load_obstacles(filename: str, nr_bytes: int) -> set[tuple[int, int]]:
-    obstacles = set()
+def load_obstacles(filename: str) -> list[tuple[int, int]]:
+    obstacles = []
     with open(filename) as file:
         for i, line in enumerate(file):
-            if i == nr_bytes:
-                break
             nums = line.strip().split(',')
-            obstacles.add((int(nums[1]), int(nums[0])))
+            obstacles.append((int(nums[1]), int(nums[0])))
     return obstacles
 
 
@@ -50,8 +48,21 @@ def bfs(rows: int, cols: int, illegal: set[tuple[int, int]]) -> int:
 
 
 def part1(memory_dimensions: tuple[int, int], nr_bytes: int) -> int:
-    obstacles = load_obstacles('input.txt', nr_bytes)
+    obstacles = set(load_obstacles('input.txt')[:nr_bytes])
     return bfs(memory_dimensions[0], memory_dimensions[1], obstacles)
 
 
+# TODO: This is the naive solution; At least implement a binary search one
+def part2(memory_dimensions: tuple[int, int]) -> tuple[int, int]:
+    all_obstacles = load_obstacles('input.txt', )
+    cur_obstacles = set()
+    for nr_bytes in range(len(all_obstacles)):
+        cur_obstacles.add(all_obstacles[nr_bytes])
+        if bfs(memory_dimensions[0], memory_dimensions[1], cur_obstacles) == -1:
+            print_memory(71, 71, cur_obstacles)
+            return all_obstacles[nr_bytes][1], all_obstacles[nr_bytes][0]
+    return -1, -1
+
+
 print(part1((71, 71), 1024))
+print(part2((71, 71)))
