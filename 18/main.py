@@ -55,12 +55,11 @@ def part1(memory_dimensions: tuple[int, int], nr_bytes: int) -> int:
 # TODO: This is the naive solution; At least implement a binary search one
 def part2(memory_dimensions: tuple[int, int]) -> tuple[int, int]:
     all_obstacles = load_obstacles('input.txt', )
-    cur_obstacles = set()
-    for nr_bytes in range(len(all_obstacles)):
-        cur_obstacles.add(all_obstacles[nr_bytes])
-        if bfs(memory_dimensions[0], memory_dimensions[1], cur_obstacles) == -1:
-            print_memory(71, 71, cur_obstacles)
-            return all_obstacles[nr_bytes][1], all_obstacles[nr_bytes][0]
+    cur_obstacles = set(all_obstacles)
+    for byte_idx in range(len(all_obstacles) - 1, -1, -1):
+        cur_obstacles.remove(all_obstacles[byte_idx])
+        if bfs(memory_dimensions[0], memory_dimensions[1], cur_obstacles) != -1:
+            return all_obstacles[byte_idx][1], all_obstacles[byte_idx][0]
     return -1, -1
 
 
