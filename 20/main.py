@@ -55,4 +55,22 @@ def part1():
     return ways_to_cheat
 
 
+# TODO: think about improving this, there's probably a better solution
+def part2():
+    racetrack, start_pos = load_racetrack('input.txt')
+    track_costs = assign_costs_to_track(racetrack, start_pos)
+
+    ways_to_cheat = 0
+    # Go through all positions we drive through, try to cheat
+    for pos, cost in track_costs.items():
+        # Try to cheat to every other path
+        for new_pos in track_costs.keys():
+            distance = abs(new_pos[0] - pos[0]) + abs(new_pos[1] - pos[1])
+            if distance <= 20 and track_costs[new_pos] - cost - distance >= 100:
+                ways_to_cheat += 1
+
+    return ways_to_cheat
+
+
 print(part1())
+print(part2())
