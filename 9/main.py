@@ -38,4 +38,63 @@ def part1():
     return checksum
 
 
+def part2():
+    uncompressed_disk = read_uncompress_disk_map("input.txt")
+
+    # Naive approach
+    # entries (idx, size)
+    free_spaces: list[tuple[int, int]] = []
+
+    i = 0
+    while i < len(uncompressed_disk):
+        free_space = 0
+        while i < len(uncompressed_disk) and uncompressed_disk[i] == -1:
+            free_space += 1
+            i += 1
+        if free_space > 0:
+            free_spaces.append((i - free_space, free_space))
+        i += 1
+
+    l, r = free_spaces[0][0], len(uncompressed_disk) - 1
+    while l < r:
+        # TODO: optimize this (actually remove 'free_space's with no space left)
+        l = free_spaces[0][0]  # Leftmost free space
+        # Find file block with r
+        while l < r and uncompressed_disk[r] == -1:
+            r -= 1
+        if l >= r:
+            break
+        # Check size of r
+        file_size = 1
+        for p in range(r - 1, 0, -1):
+            if uncompressed_disk[p] != uncompressed_disk[r]:  # Reached start of file
+                break
+            file_size += 1
+
+        # Try to find free space big enough to accommodate file
+        for i in range(len(free_spaces)):
+            idx, free_space = free_spaces[i][0], free_spaces[i][1]
+            if idx > r - file_size:
+                break
+            if file_size <= free_space:
+                # Move file into free space, shrink free space
+                for j in range(file_size):
+                    uncompressed_disk[idx + j] = uncompressed_disk[r - file_size + 1 + j]
+                    uncompressed_disk[r - file_size + 1 + j] = -1
+                free_spaces[i] = (idx + file_size, free_space - file_size)
+                break
+
+        # Either file has not been moved (-> skip it) OR file has been moved (-> skip the free space it left)
+        r -= file_size
+
+    checksum = 0
+    for i in range(len(uncompressed_disk)):
+        if uncompressed_disk[i] == -1:
+            continue
+        checksum += i * uncompressed_disk[i]
+
+    return checksum
+
+
 print(part1())
+print(part2())
