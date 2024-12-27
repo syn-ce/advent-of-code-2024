@@ -1,16 +1,5 @@
+import operator
 from typing import Callable
-
-
-def logical_and(a: int, b: int) -> int:
-    return a & b
-
-
-def logical_or(a: int, b: int) -> int:
-    return a | b
-
-
-def logical_xor(a: int, b: int) -> int:
-    return a ^ b
 
 
 def load_circuit(filename: str):
@@ -38,7 +27,7 @@ def load_circuit(filename: str):
     while i < len(lines):
         s = lines[i].split(' ')
         in_wire1, op_type, in_wire2, out_wire = s[0], s[1], s[2], s[4]
-        op = logical_and if op_type == 'AND' else (logical_or if op_type == 'OR' else logical_xor)
+        op = operator.and_ if op_type == 'AND' else (operator.or_ if op_type == 'OR' else operator.xor)
         if in_wire1 not in connections:
             connections[in_wire1] = set()
         if in_wire2 not in connections:
